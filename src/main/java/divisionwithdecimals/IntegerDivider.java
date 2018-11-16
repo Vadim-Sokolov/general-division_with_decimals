@@ -5,17 +5,17 @@ import java.util.List;
 
 public class IntegerDivider {
 	
-	private DivisionParameters divisionParameters;
+	private DivisionInformation divisionInformation;
 	private List<DivisionStep> divisionSteps;
 		
-	public IntegerDivider(DivisionParameters divisionParameters) {
-		this.divisionParameters = divisionParameters;
-		this.divisionSteps = divisionParameters.getDivisionSteps();
+	public IntegerDivider(DivisionInformation divisionInformation) {
+		this.divisionInformation = divisionInformation;
+		this.divisionSteps = divisionInformation.getDivisionSteps();
 	}
 
 	public void performIntegerDivision() {
-		int absoluteDividend = divisionParameters.getAbsoluteDividend();
-		int absoluteDivisor = divisionParameters.getAbsoluteDivisor();
+		int absoluteDividend = divisionInformation.getAbsoluteDividend();
+		int absoluteDivisor = divisionInformation.getAbsoluteDivisor();
 		int[] digitsOfDividend = convertIntegerToDigits(absoluteDividend);
 		divide(absoluteDivisor, digitsOfDividend);
 	}
@@ -38,17 +38,17 @@ public class IntegerDivider {
 					index++;
 				}
 				currentDividendNumber = getNextDividend(currentDividendNumber, digitsOfDividend, index, divisor);
-				index = divisionParameters.getCurrentIndex();
+				index = divisionInformation.getCurrentIndex();
 			} else {
 				index++;
 			}
-			createStep(currentDividendNumber, divisor, divisionParameters.getCurrentIndex());
+			createStep(currentDividendNumber, divisor, divisionInformation.getCurrentIndex());
 			currentDividendNumber = currentDividendNumber % divisor;
 		}
-		divisionParameters.setDivisionSteps(divisionSteps);
+		divisionInformation.setDivisionSteps(divisionSteps);
 	}
 	
-	protected void createStep(int currentDividendNumber, int divisor, int spaceShift) {
+	private void createStep(int currentDividendNumber, int divisor, int spaceShift) {
 		int currentQuotient = currentDividendNumber / divisor;
 		int integerToSubtract = divisor * currentQuotient;
 		divisionSteps.add(new DivisionStep(currentDividendNumber, integerToSubtract, spaceShift));
@@ -62,7 +62,7 @@ public class IntegerDivider {
 				break;
 			}
 		}
-		divisionParameters.setCurrentIndex(index);
+		divisionInformation.setCurrentIndex(index);
 		return currentDividendNumber;
 	}
 

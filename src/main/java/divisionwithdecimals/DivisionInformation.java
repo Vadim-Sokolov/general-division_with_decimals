@@ -3,7 +3,7 @@ package divisionwithdecimals;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DivisionParameters {
+public class DivisionInformation {
 
 	private int dividend;
 	private int divisor;
@@ -17,12 +17,16 @@ public class DivisionParameters {
 	private List<DivisionStep> divisionSteps;
 	private int decimalRemainder;
 
-	public DivisionParameters(int dividend, int divisor) {
+	public DivisionInformation(int dividend, int divisor) {
+		this.dividend = dividend;
+		this.divisor = divisor;
+		setVariables();
+	}
+	
+	private void setVariables() {
 		if (divisor == 0) {
 			throw new ArithmeticException();
 		}
-		this.dividend = dividend;
-		this.divisor = divisor;
 		this.quotient = dividend / divisor;
 		this.remainder = dividend % divisor;
 		this.absoluteDividend = Math.abs(dividend);
