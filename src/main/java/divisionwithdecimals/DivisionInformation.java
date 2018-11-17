@@ -16,17 +16,13 @@ public class DivisionInformation {
 	private String decimalResult;
 	private List<DivisionStep> divisionSteps;
 	private int decimalRemainder;
-
-	public DivisionInformation(int dividend, int divisor) {
-		this.dividend = dividend;
-		this.divisor = divisor;
-		setVariables();
-	}
 	
-	private void setVariables() {
+	public void build(int dividend, int divisor) {
 		if (divisor == 0) {
 			throw new ArithmeticException();
 		}
+		this.dividend = dividend;
+		this.divisor = divisor;
 		this.quotient = dividend / divisor;
 		this.remainder = dividend % divisor;
 		this.absoluteDividend = Math.abs(dividend);

@@ -14,7 +14,7 @@ public class DecimalDivider {
 	private DivisionInformation divisionInformation;
 	private List<DivisionStep> divisionSteps;
 
-	public DecimalDivider(DivisionInformation divisionInformation) {
+	public void build(DivisionInformation divisionInformation) {
 		this.divisionInformation = divisionInformation;
 		this.absoluteDividend = divisionInformation.getAbsoluteDividend();
 		this.absoluteDivisor = divisionInformation.getAbsoluteDivisor();
@@ -23,10 +23,6 @@ public class DecimalDivider {
 		this.repeatingAt = -1;
 		this.remainders = new ArrayList<Integer>();
 		this.divisionSteps = divisionInformation.getDivisionSteps();
-		setVariables();
-	}
-	
-	private void setVariables() {
 		this.wholePart = absoluteDividend / absoluteDivisor;
 		this.absoluteDividend = (absoluteDividend % absoluteDivisor) * 10;
 	}
@@ -37,7 +33,7 @@ public class DecimalDivider {
 		setResultForRepeatingDecimal();
 		setDecimalRemainder();
 	}
-	
+
 	private void setResultForTerminatingDecimal() {
 		if (absoluteDividend == 0) {
 			if (negativeResult) {
@@ -47,7 +43,7 @@ public class DecimalDivider {
 			}
 		}
 	}
-	
+
 	private void setResultForRepeatingDecimal() {
 		while (absoluteDividend > 0 && repeatingAt == -1) {
 			remainders.add(absoluteDividend);
@@ -55,9 +51,9 @@ public class DecimalDivider {
 				createStep(absoluteDividend, absoluteDivisor,
 						remainders.size() + getIntegerLength(divisionInformation.getDividend()));
 			}
-			int whole = absoluteDividend / absoluteDivisor;
+			int integerDivisionValue = absoluteDividend / absoluteDivisor;
 			absoluteDividend = (absoluteDividend % absoluteDivisor) * 10;
-			fractionDigits.add(whole);
+			fractionDigits.add(integerDivisionValue);
 			repeatingAt = remainders.indexOf(absoluteDividend);
 			setDecimalResult();
 		}
@@ -76,17 +72,15 @@ public class DecimalDivider {
 		appendBracket(result);
 		divisionInformation.setDecimalResult(result.toString());
 	}
-	
-	private StringBuilder appendHyphen(StringBuilder stringBuilder) {
-		StringBuilder result = stringBuilder;
+
+	private StringBuilder appendHyphen(StringBuilder result) {
 		if (negativeResult) {
 			result.append("-");
 		}
 		return result;
 	}
-	
-	private StringBuilder appendFractionDigits(StringBuilder stringBuilder) {
-		StringBuilder result = stringBuilder;
+
+	private StringBuilder appendFractionDigits(StringBuilder result) {
 		for (int i = 0; i < fractionDigits.size(); i++) {
 			if (i == repeatingAt) {
 				result.append("(");
@@ -95,9 +89,8 @@ public class DecimalDivider {
 		}
 		return result;
 	}
-	
-	private StringBuilder appendBracket(StringBuilder stringBuilder) {
-		StringBuilder result = stringBuilder;
+
+	private StringBuilder appendBracket(StringBuilder result) {
 		if (repeatingAt >= 0) {
 			result.append(")");
 		}
