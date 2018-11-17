@@ -6,75 +6,75 @@ import java.util.List;
 public class ResultBuilder {
 
 	private StringBuilder result = new StringBuilder();
-	private final int DIVIDEND_SHIFT_SPACES = 2;
-	private final int SUBTRACTION_SHIFT_SPACES = 1;
-	private DivisionInformation divisionInformation;
+	private static final int DIVIDEND_SHIFT_SPACES = 2;
+	private static final int SUBTRACTION_SHIFT_SPACES = 1;
+	private DivisionData divisionData;
 	private List<DivisionStep> divisionSteps;
 
-	public ResultBuilder(DivisionInformation divisionInformation, List<DivisionStep> divisionSteps) {
-		this.divisionInformation = divisionInformation;
+	public ResultBuilder(DivisionData divisionData, List<DivisionStep> divisionSteps) {
+		this.divisionData = divisionData;
 		this.divisionSteps = divisionSteps;
 	}
 
 	public String convertDivisionResultToString() {
-		int dividendLength = getIntegerLength(divisionInformation.getAbsoluteDividend());
-		appendFirstLine(divisionInformation, dividendLength);
-		appendSecondLine(divisionInformation, dividendLength);
-		appendThirdLine(divisionInformation, dividendLength);
+		int dividendLength = getIntegerLength(divisionData.getAbsoluteDividend());
+		appendFirstLine(divisionData, dividendLength);
+		appendSecondLine(divisionData, dividendLength);
+		appendThirdLine(divisionData);
 		appendDivisionSteps(divisionSteps);
-		appendLastLine(divisionInformation, dividendLength);
+		appendLastLine(divisionData, dividendLength);
 		return result.toString();
 	}
 
-	private void appendFirstLine(DivisionInformation divisionInformation, int dividendLength) {
-		if (divisionInformation.getDividend() >= 0) {
+	private void appendFirstLine(DivisionData divisionData, int dividendLength) {
+		if (divisionData.getDividend() >= 0) {
 			result.append("_");
 		}
-		if (dividendLength <= getIntegerLength(divisionInformation.getAbsoluteDivisor())
-				&& divisionInformation.getDividend() !=0
-				&& divisionInformation.getAbsoluteDividend() != divisionInformation.getAbsoluteDivisor()) {
-			result.append(divisionInformation.getDividend()).append(" ").append("|")
-					.append(divisionInformation.getDivisor()).append("\n");
+		if (dividendLength <= getIntegerLength(divisionData.getAbsoluteDivisor())
+				&& divisionData.getDividend() !=0
+				&& divisionData.getAbsoluteDividend() != divisionData.getAbsoluteDivisor()) {
+			result.append(divisionData.getDividend()).append(" ").append("|")
+					.append(divisionData.getDivisor()).append("\n");
 		} else {
-			result.append(divisionInformation.getDividend()).append("|").append(divisionInformation.getDivisor())
+			result.append(divisionData.getDividend()).append("|").append(divisionData.getDivisor())
 					.append("\n");
 		}
 	}
 
-	private void appendSecondLine(DivisionInformation divisionInformation, int dividendLength) {
+	private void appendSecondLine(DivisionData divisionData, int dividendLength) {
 		int index = 0;
-		if (divisionInformation.getAbsoluteDividend() < divisionInformation.getAbsoluteDivisor()
-				&& divisionInformation.getAbsoluteDividend() != 0) {
+		if (divisionData.getAbsoluteDividend() < divisionData.getAbsoluteDivisor()
+				&& divisionData.getAbsoluteDividend() != 0) {
 			index = 1;
 		}
 		result.append(" ").append(divisionSteps.get(index).getIntegerToSubtract()).append(
-				createStringOfChars(dividendLength - getIntegerLength(divisionInformation.getAbsoluteDivisor()), ' '))
+				createStringOfChars(dividendLength - getIntegerLength(divisionData.getAbsoluteDivisor()), ' '))
 				.append("|");
-		if (getIntegerLength(divisionInformation.getDivisor()) > divisionInformation.getDecimalResult().length()) {
-			result.append(createStringOfChars(getIntegerLength(divisionInformation.getDivisor()), '-')).append("\n");
+		if (getIntegerLength(divisionData.getDivisor()) > divisionData.getDecimalResult().length()) {
+			result.append(createStringOfChars(getIntegerLength(divisionData.getDivisor()), '-')).append("\n");
 		} else {
-			result.append(createStringOfChars(divisionInformation.getDecimalResult().length(), '-')).append("\n");
+			result.append(createStringOfChars(divisionData.getDecimalResult().length(), '-')).append("\n");
 		}
 	}
 
-	private void appendThirdLine(DivisionInformation divisionInformation, int dividendLength) {
+	private void appendThirdLine(DivisionData divisionData) {
 		int index = 0;
-		if (divisionInformation.getAbsoluteDividend() < divisionInformation.getAbsoluteDivisor()
-				&& divisionInformation.getAbsoluteDividend() != 0) {
+		if (divisionData.getAbsoluteDividend() < divisionData.getAbsoluteDivisor()
+				&& divisionData.getAbsoluteDividend() != 0) {
 			index = 1;
 		}
 		result.append(" ").append(createStringOfChars(getIntegerLength(divisionSteps.get(index).getIntegerToSubtract()), '-'));
-		if (getIntegerLength(divisionInformation.getAbsoluteDividend()) 
-				> getIntegerLength(divisionInformation.getDivisionSteps().get(index).getIntegerToSubtract())) {
-			result.append(createStringOfChars(getIntegerLength(divisionInformation.getAbsoluteDividend()) 
-					- getIntegerLength(divisionInformation.getDivisionSteps().get(index).getIntegerToSubtract()), ' '));
+		if (getIntegerLength(divisionData.getAbsoluteDividend()) 
+				> getIntegerLength(divisionData.getDivisionSteps().get(index).getIntegerToSubtract())) {
+			result.append(createStringOfChars(getIntegerLength(divisionData.getAbsoluteDividend()) 
+					- getIntegerLength(divisionData.getDivisionSteps().get(index).getIntegerToSubtract()), ' '));
 		}
-		result.append("|").append(divisionInformation.getDecimalResult()).append("\n");
+		result.append("|").append(divisionData.getDecimalResult()).append("\n");
 	}
 
 	private void appendDivisionSteps(List<DivisionStep> divisionSteps) {
 		int index = 1;
-		if (divisionInformation.getAbsoluteDividend() < divisionInformation.getAbsoluteDivisor()) {
+		if (divisionData.getAbsoluteDividend() < divisionData.getAbsoluteDivisor()) {
 			index = 2;
 		}
 		for (int i = index; i < divisionSteps.size(); i++) {
@@ -86,14 +86,14 @@ public class ResultBuilder {
 		}
 	}
 
-	private void appendLastLine(DivisionInformation divisionInformation, int dividendLength) {
-		if (divisionInformation.getRemainder() == 0) {
+	private void appendLastLine(DivisionData divisionData, int dividendLength) {
+		if (divisionData.getRemainder() == 0) {
 			result.append(createStringOfChars(dividendLength, ' ')).append("0");
 		} else {
-			DivisionStep target = divisionInformation.getDivisionSteps()
-					.get(divisionInformation.getDivisionSteps().size() - 1);
+			DivisionStep target = divisionData.getDivisionSteps()
+					.get(divisionData.getDivisionSteps().size() - 1);
 			result.append(createStringOfChars(target.getSpaceShift(), ' '))
-					.append(divisionInformation.getDecimalRemainder());
+					.append(divisionData.getDecimalRemainder());
 		}
 	}
 
@@ -128,11 +128,11 @@ public class ResultBuilder {
 		this.result = result;
 	}
 
-	public DivisionInformation getDivisionParameters() {
-		return divisionInformation;
+	public DivisionData getDivisionParameters() {
+		return divisionData;
 	}
 
-	public void setDivisionParameters(DivisionInformation divisionInformation) {
-		this.divisionInformation = divisionInformation;
+	public void setDivisionParameters(DivisionData divisionData) {
+		this.divisionData = divisionData;
 	}
 }

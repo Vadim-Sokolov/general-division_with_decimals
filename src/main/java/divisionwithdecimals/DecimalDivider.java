@@ -11,18 +11,18 @@ public class DecimalDivider {
 	private int absoluteDivisor;
 	private boolean negativeResult;
 	private List<Integer> remainders;
-	private DivisionInformation divisionInformation;
+	private DivisionData divisionData;
 	private List<DivisionStep> divisionSteps;
 
-	public void build(DivisionInformation divisionInformation) {
-		this.divisionInformation = divisionInformation;
-		this.absoluteDividend = divisionInformation.getAbsoluteDividend();
-		this.absoluteDivisor = divisionInformation.getAbsoluteDivisor();
-		this.negativeResult = divisionInformation.isNegativeResult();
+	public void build(DivisionData divisionData) {
+		this.divisionData = divisionData;
+		this.absoluteDividend = divisionData.getAbsoluteDividend();
+		this.absoluteDivisor = divisionData.getAbsoluteDivisor();
+		this.negativeResult = divisionData.isNegativeResult();
 		this.fractionDigits = new ArrayList<Integer>();
 		this.repeatingAt = -1;
 		this.remainders = new ArrayList<Integer>();
-		this.divisionSteps = divisionInformation.getDivisionSteps();
+		this.divisionSteps = divisionData.getDivisionSteps();
 		this.wholePart = absoluteDividend / absoluteDivisor;
 		this.absoluteDividend = (absoluteDividend % absoluteDivisor) * 10;
 	}
@@ -37,9 +37,9 @@ public class DecimalDivider {
 	private void setResultForTerminatingDecimal() {
 		if (absoluteDividend == 0) {
 			if (negativeResult) {
-				divisionInformation.setDecimalResult("-" + String.valueOf(wholePart));
+				divisionData.setDecimalResult("-" + String.valueOf(wholePart));
 			} else {
-				divisionInformation.setDecimalResult(String.valueOf(wholePart));
+				divisionData.setDecimalResult(String.valueOf(wholePart));
 			}
 		}
 	}
@@ -49,7 +49,7 @@ public class DecimalDivider {
 			remainders.add(absoluteDividend);
 			if (absoluteDividend >= absoluteDivisor) {
 				createStep(absoluteDividend, absoluteDivisor,
-						remainders.size() + getIntegerLength(divisionInformation.getDividend()));
+						remainders.size() + getIntegerLength(divisionData.getDividend()));
 			}
 			int integerDivisionValue = absoluteDividend / absoluteDivisor;
 			absoluteDividend = (absoluteDividend % absoluteDivisor) * 10;
@@ -60,7 +60,7 @@ public class DecimalDivider {
 	}
 
 	private void performIntegerDivision() {
-		IntegerDivider integerDivider = new IntegerDivider(divisionInformation);
+		IntegerDivider integerDivider = new IntegerDivider(divisionData);
 		integerDivider.performIntegerDivision();
 	}
 
@@ -70,7 +70,7 @@ public class DecimalDivider {
 		result.append(wholePart + ".");
 		appendFractionDigits(result);
 		appendBracket(result);
-		divisionInformation.setDecimalResult(result.toString());
+		divisionData.setDecimalResult(result.toString());
 	}
 
 	private StringBuilder appendHyphen(StringBuilder result) {
@@ -109,7 +109,7 @@ public class DecimalDivider {
 
 	private void setDecimalRemainder() {
 		DivisionStep target = divisionSteps.get(divisionSteps.size() - 1);
-		divisionInformation.setDecimalRemainder(target.getDividend() - target.getIntegerToSubtract());
+		divisionData.setDecimalRemainder(target.getDividend() - target.getIntegerToSubtract());
 	}
 
 	public List<Integer> getRemainders() {
@@ -120,12 +120,12 @@ public class DecimalDivider {
 		this.remainders = remainders;
 	}
 
-	public DivisionInformation getDivisionParameters() {
-		return divisionInformation;
+	public DivisionData getDivisionParameters() {
+		return divisionData;
 	}
 
-	public void setDivisionParameters(DivisionInformation divisionInformation) {
-		this.divisionInformation = divisionInformation;
+	public void setDivisionParameters(DivisionData divisionData) {
+		this.divisionData = divisionData;
 	}
 
 	public List<DivisionStep> getDivisionSteps() {

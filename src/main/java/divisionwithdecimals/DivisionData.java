@@ -3,7 +3,7 @@ package divisionwithdecimals;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DivisionInformation {
+public class DivisionData {
 
 	private int dividend;
 	private int divisor;

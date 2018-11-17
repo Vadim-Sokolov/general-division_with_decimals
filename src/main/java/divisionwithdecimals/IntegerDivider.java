@@ -1,21 +1,20 @@
 package divisionwithdecimals;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IntegerDivider {
 	
-	private DivisionInformation divisionInformation;
+	private DivisionData divisionData;
 	private List<DivisionStep> divisionSteps;
 		
-	public IntegerDivider(DivisionInformation divisionInformation) {
-		this.divisionInformation = divisionInformation;
-		this.divisionSteps = divisionInformation.getDivisionSteps();
+	public IntegerDivider(DivisionData divisionData) {
+		this.divisionData = divisionData;
+		this.divisionSteps = divisionData.getDivisionSteps();
 	}
 
 	public void performIntegerDivision() {
-		int absoluteDividend = divisionInformation.getAbsoluteDividend();
-		int absoluteDivisor = divisionInformation.getAbsoluteDivisor();
+		int absoluteDividend = divisionData.getAbsoluteDividend();
+		int absoluteDivisor = divisionData.getAbsoluteDivisor();
 		int[] digitsOfDividend = convertIntegerToDigits(absoluteDividend);
 		divide(absoluteDivisor, digitsOfDividend);
 	}
@@ -38,14 +37,14 @@ public class IntegerDivider {
 					index++;
 				}
 				currentDividendNumber = getNextDividend(currentDividendNumber, digitsOfDividend, index, divisor);
-				index = divisionInformation.getCurrentIndex();
+				index = divisionData.getCurrentIndex();
 			} else {
 				index++;
 			}
-			createStep(currentDividendNumber, divisor, divisionInformation.getCurrentIndex());
+			createStep(currentDividendNumber, divisor, divisionData.getCurrentIndex());
 			currentDividendNumber = currentDividendNumber % divisor;
 		}
-		divisionInformation.setDivisionSteps(divisionSteps);
+		divisionData.setDivisionSteps(divisionSteps);
 	}
 	
 	private void createStep(int currentDividendNumber, int divisor, int spaceShift) {
@@ -62,7 +61,7 @@ public class IntegerDivider {
 				break;
 			}
 		}
-		divisionInformation.setCurrentIndex(index);
+		divisionData.setCurrentIndex(index);
 		return currentDividendNumber;
 	}
 

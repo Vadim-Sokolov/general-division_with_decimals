@@ -2,46 +2,33 @@ package divisionwithdecimals;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
 
 public class IntegerDividerTest {
+	
+	DivisionService divisionService = new DivisionService();
 
 	@Test(expected = ArithmeticException.class)
 	public void shouldThrowException_whenDivideZeroByZero() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(0, 0);
+		divisionService.calculateDivisionResult(0, 0);
 	}
 
 	@Test(expected = ArithmeticException.class)
 	public void shouldThrowException_whenDivideNegativeNumberByZero() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(-10, 0);
+		divisionService.calculateDivisionResult(-10, 0);
 	}
 
 	@Test
 	public void shouldReturnCorrectResult_whenDivideZeroByNegativeNumber() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(0, -10);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_0|-10\n" + 
 		" 0|---\n" + 
 		" -|0\n" + 
 		" 0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(0, -10));
 	}
 
 	@Test
 	public void shouldReturnCorrectResult_whenDivideNegativeNumberByNegativeNumber() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(-200200, -10);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"-200200|-10\n" + 
 		" 20    |-----\n" + 
@@ -53,17 +40,11 @@ public class IntegerDividerTest {
 		"     0\n" + 
 		"     -\n" + 
 		"      0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(-200200, -10));
 	}
 
 	@Test
 	public void shouldReturnCorrectResult_whenDivideNegativeNumberByPositiveNumber() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(-200200, 1000);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"-200200|1000\n" + 
 		" 2000  |------\n" + 
@@ -75,17 +56,11 @@ public class IntegerDividerTest {
 		"       2000\n" + 
 		"       ----\n" + 
 		"        0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(-200200, 1000));
 	}
 
 	@Test
 	public void shouldReturnCorrectResult_whenDividePositiveNumberByPositiveNumber() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(78945, 4);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_78945|4\n" + 
 		" 4    |--------\n" + 
@@ -109,17 +84,11 @@ public class IntegerDividerTest {
 		"      20\n" + 
 		"      --\n" + 
 		"       0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(78945, 4));
 	}
 
 	@Test
 	public void shouldReturnCorrectResult_whenDividePositiveNumberByOne() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(10000000, 1);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_10000000|1\n" + 
 		" 1       |--------\n" + 
@@ -128,33 +97,21 @@ public class IntegerDividerTest {
 		"       0\n" + 
 		"       -\n" + 
 		"        0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(10000000, 1));
 	}
 	
 	@Test
 	public void shouldReturnCorrectResult_whenDivideOneByNegativeOne() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(1, -1);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_1|-1\n" + 
 		" 1|--\n" + 
 		" -|-1\n" + 
 		" 0";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(1, -1));
 	}
 	
 	@Test
 	public void shouldReturnCorrectResult_whenPositiveNumbersProduceRepeatingDecimal() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(1000, 3);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_1000|3\n" + 
 		" 9   |-------\n" + 
@@ -169,17 +126,11 @@ public class IntegerDividerTest {
 		"    9\n" + 
 		"    --\n" + 
 		"     1";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(1000, 3));
 	}
 	
 	@Test
 	public void shouldReturnCorrectResult_whenPositiveAndNegativeNumberProduceRepeatingDecimal() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(7777, -3);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_7777|-3\n" + 
 		" 6   |---------\n" + 
@@ -197,17 +148,11 @@ public class IntegerDividerTest {
 		"    9\n" + 
 		"    --\n" + 
 		"     1";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(7777, -3));
 	}
 	
 	@Test
 	public void shouldReturnCorrectResult_whenDividendSmallerThanDivisorProducesRepeatingDecimal() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(7, 12);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"_7 |12\n" + 
 		" 60|-------\n" + 
@@ -219,17 +164,11 @@ public class IntegerDividerTest {
 		"   36\n" + 
 		"   --\n" + 
 		"    4";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(7, 12));
 	}
 	
 	@Test
 	public void shouldReturnCorrectResult_whenNegativeNumbersProduceRepeatingDecimal() {
-		DivisionInformation divisionInformation = new DivisionInformation();
-		divisionInformation.build(-25, -39);
-		DecimalDivider decimalDivider = new DecimalDivider();
-		decimalDivider.build(divisionInformation);
-		decimalDivider.performDivision();
-		ResultBuilder resultBuilder = new ResultBuilder(divisionInformation, divisionInformation.getDivisionSteps());
 		String expected = 
 		"-25 |-39\n" + 
 		" 234|----------\n" + 
@@ -247,6 +186,6 @@ public class IntegerDividerTest {
 		"        195\n" + 
 		"        ---\n" + 
 		"         25";
-		assertEquals(expected, resultBuilder.convertDivisionResultToString());
+		assertEquals(expected, divisionService.calculateDivisionResult(-25, -39));
 	}
 }
